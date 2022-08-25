@@ -1,10 +1,9 @@
 import numpy as np
-import streamlit as st
 
 def get_point_dist(df):
     r = 6371000 # meters
-    df['theta'] = np.deg2rad(df['lon'])
-    df['phi'] = np.deg2rad(df['lat'])
+    df['theta'] = np.deg2rad(df['longitude'])
+    df['phi'] = np.deg2rad(df['latitude'])
     df['x'] = r*np.cos(df['theta'])*np.sin(df['phi'])
     df['y'] = r*np.sin(df['theta'])*np.sin(df['phi'])
     df['z'] = r*np.cos(df['phi'])
@@ -18,12 +17,12 @@ def get_point_dist(df):
     return df
 
 def get_speed(df):
-    st.write(df)
-    df['speed'] = df['arclength'] / (df.datetimes.diff()  / np.timedelta64(1, 's'))
+    df['speed'] = df['arclength'] / (df.time.diff()  / np.timedelta64(1, 'ns'))
     return df
 
 def get_abs_speed(df):
-    df['abs_speed'] = np.abs(df['speed'])
+    df['speed'] = df['speed'].fillna(0)
+    df['abs_speed'] = np.abs(df['speed']).astype("int8")
     return df
 
 def get_speeds(df):

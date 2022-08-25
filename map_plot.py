@@ -9,8 +9,8 @@ def get_gps_tracks(gps_df_input):
 
     fig = go.Figure(go.Scattermapbox(
         mode = "markers+lines",
-        lon = gps_df.lon,
-        lat = gps_df.lat,
+        lon = gps_df.longitude,
+        lat = gps_df.latitude,
         marker=go.scattermapbox.Marker(
                 color=gps_df.speed,
                 colorscale=["green", "yellow", "red" ],
@@ -24,7 +24,7 @@ def get_gps_tracks(gps_df_input):
             f"</br></br>lat : {point[1]:.2f}"
             f"</br>lon : {point[2]:.2f}"
             f"<extra>speed : {point[3]:.1f}</extra>"
-            for point in gps_df.reset_index(level=0)[["datetimes", "lat", "lon", "speed"]].values
+            for point in gps_df.reset_index(level=0)[["time", "latitude", "longitude", "speed"]].values
         ],
 
     ))
@@ -38,7 +38,7 @@ def get_gps_tracks(gps_df_input):
         title_font_size = 24,
         mapbox_accesstoken=API_TOKEN,
         mapbox_style = "mapbox://styles/mapbox/satellite-v9",
-        mapbox={'center': go.layout.mapbox.Center(lat=gps_df.lat[-1], lon=gps_df.lon[-1]), 'zoom': 3},
+        mapbox={'center': go.layout.mapbox.Center(lat=gps_df.latitude[-1], lon=gps_df.longitude[-1]), 'zoom': 3},
     )
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
@@ -47,6 +47,8 @@ def get_gps_tracks(gps_df_input):
     fig.update_yaxes(automargin=True)
     return fig
 
-def line_chart(df, x, y, title=''):
-    fig = px.line(df, x=df.index, y=y, title=title)
+def line_chart(df, y, title=''):
+    x_name = df.index.name
+    df[x_name] = df.index
+    fig = px.line(df, x=x_name, y=y, title=title)
     return fig
