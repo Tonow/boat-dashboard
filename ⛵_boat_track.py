@@ -8,6 +8,7 @@ import pydeck as pdk
 from map_plot import get_gps_tracks, line_chart, histogram_chart
 from get_data import get_data_from_gs_sheet
 from config import M_TO_MNI
+import plotly.express as px
 
 st.set_page_config(page_title="ToNo et les deux 🐈‍⬛", layout="wide", page_icon="⛵")
 
@@ -49,10 +50,11 @@ if st.checkbox('Voir le tableau de données'):
 fig = get_gps_tracks(filtered_data)
 st.plotly_chart(fig, use_container_width=True)
 
+st.subheader('Dernière')
 col1, col2, col3 = st.columns(3)
-col1.metric(label="Derrière vitesse", value=f"{filtered_data.speed[-1]:.1f} Knt/h", delta=f"{(filtered_data.speed[-1] - filtered_data.speed[-2]):.1f} Knt/h")
-col2.metric(label="Derrière distance", value=f"{filtered_data.distance[-1]/1000:.2f} Km", delta=f"{(filtered_data.distance[-1] - filtered_data.distance[-2])/1000:.2f} Km")
-col3.metric(label="Mille marin", value=f"{filtered_data.distance[-1] * M_TO_MNI:.2f} Mille nautique", delta=f"{(filtered_data.distance[-1] - filtered_data.distance[-2]) * M_TO_MNI:.2f} Mni")
+col1.metric(label="Vitesse", value=f"{filtered_data.speed[-1]:.1f} Knt/h", delta=f"{(filtered_data.speed[-1] - filtered_data.speed[-2]):.1f} Knt/h")
+col2.metric(label="Distance en km", value=f"{filtered_data.distance[-1]/1000:.2f} Km", delta=f"{(filtered_data.distance[-1] - filtered_data.distance[-2])/1000:.2f} Km")
+col3.metric(label="Distance en mille marin", value=f"{filtered_data.distance[-1] * M_TO_MNI:.2f} Mille nautique", delta=f"{(filtered_data.distance[-1] - filtered_data.distance[-2]) * M_TO_MNI:.2f} Mni")
 
 col11, col12= st.columns(2)
 
@@ -70,12 +72,12 @@ with col12:
 
 col21, col22= st.columns(2)
 
-if DEBUG:
-    with col21:
-        st.subheader('Number of point by hour')
-        hist_values = np.histogram(filtered_data.index.hour, bins=24, range=(0,24))[0]
-        st.bar_chart(hist_values)
+with col21:
+    st.subheader('Vitesse par jour')
+    field_speed = "speed"
+    nb_days = len(set(filtered_data.index.date))
+    st.plotly_chart(px.scatter(filtered_data, x=filtered_data.index.date, y=field_speed, color=field_speed, size=field_speed))
 
-
-st.subheader('Distribution de la vitesse absolut')
-st.plotly_chart(histogram_chart(filtered_data, "abs_speed"), use_container_width=True)
+with col22:
+    st.subheader('Distribution de la vitesse absolut')
+    st.plotly_chart(histogram_chart(filtered_data, "abs_speed"), use_container_width=True)
