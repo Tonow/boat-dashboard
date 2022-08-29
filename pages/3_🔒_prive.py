@@ -6,12 +6,12 @@ from config import LOCAL_CSV
 st.write(st.experimental_user)
 
 
-daily_message = st.text_area('Mot du jour', '''''')
+daily_message = st.text_area('Titre', '''''')
 
 
 st.write('Resultat:', daily_message)
 
-feeling_message = st.text_area('Sentiment', '''''')
+feeling_message = st.text_area('Message', '''''')
 
 
 st.write('Resultat:', feeling_message)
