@@ -1,28 +1,31 @@
 import streamlit as st
+from datetime import datetime
 
 import csv
 from config import LOCAL_CSV
 
-st.write(st.experimental_user)
+mdp = st.text_area("mdp")
+
+if mdp == st.secrets["private_password"]:
+
+    title = st.text_area('Titre', '''''')
+
+    st.write('Resultat:', title)
+
+    message = st.text_area('Message', '''''')
 
 
-daily_message = st.text_area('Titre', '''''')
+    st.write('Resultat:', message)
 
 
-st.write('Resultat:', daily_message)
+    if st.button('Message ok'):
+        with open(LOCAL_CSV, 'a', newline='') as csvfile:
+            fieldnames = ['datetime', 'title', 'message']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-feeling_message = st.text_area('Message', '''''')
-
-
-st.write('Resultat:', feeling_message)
-
-
-if st.button('Message ok'):
-    with open(LOCAL_CSV, 'a', newline='') as csvfile:
-        fieldnames = ['daily_message', 'feeling_message']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        writer.writerow({'daily_message': daily_message, 'feeling_message': feeling_message})
-    st.write('on csv')
+            writer.writerow({'datetime': datetime.utcnow().isoformat(), 'title': title, 'message': message})
+        st.write('on csv')
+    else:
+        st.write('waiting')
 else:
-    st.write('waiting')
+   st.write('mauvais mdp')
