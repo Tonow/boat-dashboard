@@ -28,6 +28,7 @@ class DateTimeEncoder(json.JSONEncoder):
 #     return data
 
 def compute_data(data):
+    data[DATE_COLUMN] = data[DATE_COLUMN].astype('float64')
     data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN], unit='ns')
     data[DATE_COLUMN] = data[DATE_COLUMN].astype('datetime64[s]')
     data = data.sort_values(by=DATE_COLUMN)
@@ -38,31 +39,25 @@ def compute_data(data):
 #     data = load_data()
 #     return compute_data(data)
 
+# Perform SQL query on the Google Sheet.
+# Uses st.cache to only rerun when the query changes or after 20 min.
+@st.cache(ttl=1200)
+def run_query(query, conn):
+    rows = conn.execute(query, headers=1)
+    rows = rows.fetchall()
+    return rows
 
+@st.experimental_memo
 def get_data_from_gs_sheet():
     # Create a connection object.
-    conn = connect()
-
-    # Perform SQL query on the Google Sheet.
-    # Uses st.cache to only rerun when the query changes or after 10 min.
-    @st.cache(ttl=600)
-    def run_query(query):
-        rows = conn.execute(query, headers=1)
-        rows = rows.fetchall()
-        return rows
 
     sheet_url = st.secrets["public_gsheets_url"]
-    rows = run_query(f'SELECT * FROM "{sheet_url}"')
-
-    # df = pd.DataFrame({'col':L})
-    # st.write(rows)
-    # st.write(type(rows))
+    with connect() as conn:
+        rows = run_query(f'SELECT * FROM "{sheet_url}"', conn=conn)
 
     df = pd.read_json(json.dumps(rows, cls=DateTimeEncoder), orient='values')
     df.columns = COLUMNS
-    df["latitude"] = df["latitude"].astype(np.float16)
-    df["longitude"] = df["longitude"].astype(np.float16)
-    # st.write(pd.api.types.is_float_dtype(df["latitude"]))
-    # st.write(pd.api.types.is_float_dtype(df["longitude"]))
+    df["latitude"] = df["latitude"].astype(np.float32)
+    df["longitude"] = df["longitude"].astype(np.float32)
     df = compute_data(df)
     return df

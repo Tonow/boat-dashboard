@@ -1,4 +1,5 @@
 import numpy as np
+from config import M_TO_MNI
 
 def get_point_dist(df):
     r = 6371000 # meters
@@ -17,12 +18,13 @@ def get_point_dist(df):
     return df
 
 def get_speed(df):
-    df['speed'] = df['arclength'] / (df.time.diff()  / np.timedelta64(1, 'ns'))
+    df['speed'] = df['distance'] * 2 * (M_TO_MNI * 1000)  / (df.time.diff()  / np.timedelta64(1, 's'))
     return df
 
 def get_abs_speed(df):
     df['speed'] = df['speed'].fillna(0)
-    df['abs_speed'] = np.abs(df['speed']).astype("int8")
+    # df['abs_speed'] = np.abs(df['speed']).astype("float32")
+    df['abs_speed'] = np.abs(df['speed'])
     return df
 
 def get_speeds(df):

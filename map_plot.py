@@ -21,9 +21,9 @@ def get_gps_tracks(gps_df_input):
             ),
         hovertemplate=[
             f"{point[0]:%Y/%m/%d %H:%M}"
-            f"</br></br>lat : {point[1]:.2f}"
-            f"</br>lon : {point[2]:.2f}"
-            f"<extra>speed : {point[3]:.1f}</extra>"
+            f"</br></br>lat : {point[1]:.4f}"
+            f"</br>lon : {point[2]:.4f}"
+            f"<extra>speed : {point[3]:.2f}</extra>"
             for point in gps_df.reset_index(level=0)[["time", "latitude", "longitude", "speed"]].values
         ],
 
@@ -38,7 +38,7 @@ def get_gps_tracks(gps_df_input):
         title_font_size = 24,
         mapbox_accesstoken=API_TOKEN,
         mapbox_style = "mapbox://styles/mapbox/satellite-v9",
-        mapbox={'center': go.layout.mapbox.Center(lat=gps_df.latitude[-1], lon=gps_df.longitude[-1]), 'zoom': 3},
+        mapbox={'center': go.layout.mapbox.Center(lat=gps_df.latitude[-1], lon=gps_df.longitude[-1]), 'zoom': 5},
     )
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
@@ -49,6 +49,16 @@ def get_gps_tracks(gps_df_input):
 
 def line_chart(df, y, title=''):
     x_name = df.index.name
+
     df[x_name] = df.index
     fig = px.line(df, x=x_name, y=y, title=title)
+    return fig
+
+def histogram_chart(df, y, title=''):
+    x_name = df.index.name
+    df_copy = df.copy()
+
+    df_copy[x_name] = df.index
+
+    fig = px.histogram(df, x=y, y=y, title=title, color=None, hover_data=df_copy.columns, marginal="box")
     return fig
