@@ -1,6 +1,3 @@
-from tkinter.tix import COLUMN
-
-
 DATE_COLUMN = 'time'
 # DATA_URL = ('https://drive.google.com/file/d/1ZCq_5CMvtDyYihhIARnllRXVNEDSed70/view?usp=sharing')
 # DATA_URL = ('test_gpx.csv')
