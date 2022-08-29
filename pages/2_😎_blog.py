@@ -19,9 +19,7 @@ filtered_data = local_csv[(local_csv.index >= start_time) & (local_csv.index <= 
 
 for row in range(start_time, end_time + 1):
     row_value = filtered_data.loc[[row]]
-    st.title(f"Mot du jour {row}")
-    st.markdown(row_value.daily_message.values[0])
-    st.title(f"Sentiment du jour {row}")
-    st.markdown(row_value.feeling_message.values[0])
+    st.title(f"n° {row} {row_value.title.values[0]}")
+    st.markdown(row_value.message.values[0])
 
 st.dataframe(filtered_data)
