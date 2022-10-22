@@ -79,3 +79,8 @@ with col11:
 with col12:
     st.subheader('Distribution de la vitesse absolut')
     st.plotly_chart(histogram_chart(filtered_data, "abs_speed"), use_container_width=True)
+
+if st.button("Clear all cache"):
+    # Clear values from *all* memoized functions:
+    # i.e. clear values from both square and cube
+    st.experimental_memo.clear()
