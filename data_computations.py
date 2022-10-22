@@ -18,7 +18,7 @@ def get_point_dist(df):
     return df
 
 def get_speed(df):
-    df['speed'] = df['distance'] * 2 * (M_TO_MNI * 1000)  / (df.time.diff()  / np.timedelta64(1, 's'))
+    df['speed'] = df['distance'] * 4 * (M_TO_MNI * 1000)  / (df.time.diff() / np.timedelta64(1, 's'))
     return df
 
 def get_abs_speed(df):
