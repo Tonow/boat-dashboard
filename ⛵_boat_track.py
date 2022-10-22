@@ -29,6 +29,7 @@ st.set_page_config(page_title="ToNo et les deux 🐈‍⬛", layout="wide", page
 st.title("Le chemin parcourue en ⛵")
 
 data = get_data_from_gs_sheet()
+# data = get_local_data()
 
 with st.sidebar:
     (start_time, end_time) = st.select_slider(

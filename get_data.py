@@ -61,3 +61,13 @@ def get_data_from_gs_sheet():
     df["longitude"] = df["longitude"].astype(np.float32)
     df = compute_data(df)
     return df
+
+@st.experimental_memo
+def get_local_data():
+
+    df = pd.read_csv( "boat_positon.csv", sep=',')
+    df.columns = COLUMNS
+    df["latitude"] = df["latitude"].astype(np.float32)
+    df["longitude"] = df["longitude"].astype(np.float32)
+    df = compute_data(df)
+    return df
