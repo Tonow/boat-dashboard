@@ -41,7 +41,7 @@ def compute_data(data):
 
 # Perform SQL query on the Google Sheet.
 # Uses st.cache to only rerun when the query changes or after 20 min.
-@st.cache(ttl=1200)
+# @st.cache(ttl=1200)
 def run_query(query, conn):
     rows = conn.execute(query, headers=1)
     rows = rows.fetchall()
