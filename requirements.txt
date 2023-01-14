@@ -3,3 +3,4 @@ plotly
 pydeck
 gsheetsdb
 numpy
+pyparsing
