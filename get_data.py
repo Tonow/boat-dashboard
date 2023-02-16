@@ -47,7 +47,7 @@ def run_query(query, conn):
     rows = rows.fetchall()
     return rows
 
-@st.experimental_memo
+@st.cache_data
 def get_data_from_gs_sheet():
     # Create a connection object.
 
@@ -62,7 +62,7 @@ def get_data_from_gs_sheet():
     df = compute_data(df)
     return df
 
-@st.experimental_memo
+@st.cache_data
 def get_local_data():
 
     df = pd.read_csv( "boat_positon.csv", sep=',')

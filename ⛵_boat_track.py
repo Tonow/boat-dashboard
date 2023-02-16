@@ -83,4 +83,4 @@ with col12:
 if st.button("Clear all cache"):
     # Clear values from *all* memoized functions:
     # i.e. clear values from both square and cube
-    st.experimental_memo.clear()
+    st.cache_data.clear()
