@@ -34,7 +34,7 @@ data = get_data_from_gs_sheet()
 
 with st.sidebar:
     date_to_unpack = st.date_input(
-        "📅 Date time",
+        "📅 Dates",
         # options=data.index,
         min_value=data.index[0],
         max_value=data.index[ len(data.index) -1 ],
