@@ -82,12 +82,12 @@ else:
     st.plotly_chart(px.scatter(filtered_data, x=filtered_data.index, y=field_speed, color=field_speed, size=field_speed), use_container_width=True)
 
 
-    col11, col12= st.columns(2)
-    with col11:
+    tab1, tab2= st.tabs(["📈 Distribution de la vitesse absolut", "Vitesse absolue"])
+    with tab2:
         st.subheader('Vitesse absolue')
         st.plotly_chart(line_chart(filtered_data, "abs_speed"), use_container_width=True)
 
-    with col12:
+    with tab1:
         st.subheader('Distribution de la vitesse absolut')
         st.plotly_chart(histogram_chart(filtered_data, "abs_speed"), use_container_width=True)
 
